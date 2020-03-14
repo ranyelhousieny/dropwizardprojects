@@ -9,33 +9,40 @@ import org.eclipse.jetty.util.ajax.JSON;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 // URL to Elasticsearch Index
-@Path("/accounts")
-
+@Path("/accounts/{ id }")
 public class AccountsFromElasticsearch {
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getAccountById() throws IOException {
-        // 1. Create Jest Client Factory
-        JestClientFactory factory = new JestClientFactory();
+    // 1. Create Jest Client Factory
+    public static JestClientFactory factory = new JestClientFactory();
 
-        // 2. Configure Elasticsearch URL
+    // 2. create Jest Client
+    public static JestClient jestClient;
+
+    static {
+        // 3. Configure Elasticsearch URL
         factory.setHttpClientConfig(
                 new HttpClientConfig
                         .Builder("http://localhost:9200")
                         .build());
 
-        // 3. create Client from factory
-        JestClient jestClient = factory.getObject();
+        jestClient = factory.getObject();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getAccountById(@PathParam("id") String accountId) throws IOException {
+
+
 
         // 4. Build the GET Rest Command
-        Get get = new Get.Builder("bank", "1").build();
+        Get get = new Get.Builder("bank", accountId).build();
 
         // 5. Create Result
         JestResult result = jestClient.execute(get);
