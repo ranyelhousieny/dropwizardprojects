@@ -3,6 +3,7 @@ package com.yammer.dropwizarddemo;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
+import com.yammer.dropwizarddemo.resources.AccountsFromElasticsearch;
 import com.yammer.dropwizarddemo.resources.SampleResource;
 
 public class SampleService extends Service<SampleConfiguration> {
@@ -18,6 +19,7 @@ public class SampleService extends Service<SampleConfiguration> {
     @Override
     public void run(SampleConfiguration sampleConfiguration, Environment environment) throws Exception {
         environment.addResource(new SampleResource());
+        environment.addResource(new AccountsFromElasticsearch());
 
 
     }

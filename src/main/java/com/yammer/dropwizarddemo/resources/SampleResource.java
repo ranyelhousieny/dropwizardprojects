@@ -4,17 +4,17 @@ package com.yammer.dropwizarddemo.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.searchbox.client.JestClientFactory;
+import io.searchbox.client.config.HttpClientConfig;
+import io.searchbox.indices.IndicesExists;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.GET;
+import java.io.IOException;
 import java.util.function.Supplier;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
@@ -23,33 +23,28 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 
 
-@Path("/users/{ name }")
+@Path("/bank")
 public class SampleResource {
-    private Supplier<JestClient> clientSupplier;
-    private ObjectMapper mapper;
-
-    public SampleResource(Supplier<JestClient> clientSupplier) {
-
-        this.clientSupplier = clientSupplier;
-    }
-
-    public static JestClient jestClient = null;
-    public static final String ES_HOST = "localhost";
-    public static final String ES_PORT = "9200";
-
-    public static void init(){
-        try {
-            JestClientFactory factory = new JestClientFactory();
-            factory.setHttpClientConfig();
-        }
-    }
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getSamples(@PathParam("name") String name){
-        String jsonObject = "{\"age\":10,\"dateOfBirth\":1471466076564,"
-                +"\"fullName\":\"John Doe\"}";
-        return "Hello, Mr. " + name + " !!!";
+    public String getSamples() throws IOException {
+
+
+        JestClientFactory factory = new JestClientFactory();
+        factory.setHttpClientConfig(
+                new HttpClientConfig
+                        .Builder("http://localhost:9200")
+                        .build());
+        JestClient jestClient = factory.getObject();
+
+        Get get = new Get.Builder("bank", "1")
+                .build();
+
+        JestResult result = jestClient.execute(get);
+
+
+
+        return result.getJsonString();
     }
 }
