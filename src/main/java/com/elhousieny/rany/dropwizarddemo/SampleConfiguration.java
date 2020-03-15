@@ -1,4 +1,4 @@
-package com.yammer.dropwizarddemo;
+package com.elhousieny.rany.dropwizarddemo;
 
 import com.yammer.dropwizard.config.Configuration;
 

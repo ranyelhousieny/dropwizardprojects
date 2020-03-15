@@ -1,4 +1,4 @@
-package com.yammer.dropwizarddemo.resources;
+package com.elhousieny.rany.dropwizarddemo.resources;
 
 
 

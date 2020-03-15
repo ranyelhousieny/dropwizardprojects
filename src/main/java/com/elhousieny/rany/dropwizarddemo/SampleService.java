@@ -1,10 +1,10 @@
-package com.yammer.dropwizarddemo;
+package com.elhousieny.rany.dropwizarddemo;
 
+import com.elhousieny.rany.dropwizarddemo.resources.SampleResource;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
-import com.yammer.dropwizarddemo.resources.AccountsFromElasticsearch;
-import com.yammer.dropwizarddemo.resources.SampleResource;
+import com.elhousieny.rany.dropwizarddemo.resources.AccountsFromElasticsearch;
 
 public class SampleService extends Service<SampleConfiguration> {
 

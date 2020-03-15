@@ -1,10 +1,11 @@
-package com.yammer.dropwizarddemo.resources;
+package com.elhousieny.rany.dropwizarddemo.resources;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.Get;
+import io.searchbox.indices.IndicesExists;
 import org.eclipse.jetty.util.ajax.JSON;
 
 import javax.ws.rs.GET;
@@ -35,11 +36,21 @@ public class AccountsFromElasticsearch {
         jestClient = factory.getObject();
     }
 
+
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getAccountById(@PathParam("id") String accountId) throws IOException {
 
 
+        // Make sure index exists
+        JestResult indexExist = jestClient.execute(
+                new IndicesExists.
+                        Builder("bank").build());
+
+        if (!indexExist.isSucceeded()){
+            return "Failed to find index";
+        }
 
         // 4. Build the GET Rest Command
         Get get = new Get.Builder("bank", accountId).build();
